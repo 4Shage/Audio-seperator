@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://b225itawpohn2"]
+
+[sub_resource type="GDScript" id="GDScript_oa0qg"]
+script/source = "extends PanelContainer
+
+@export var text: String
+
+func _enter_tree() -> void:
+	$HBoxContainer/LineEdit.text = text
+
+func _on_line_edit_text_changed(new_text: String) -> void:
+	text = new_text
+
+
+func _on_button_pressed() -> void:
+	self.queue_free()
+"
+
+[node name="Control" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_oa0qg")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Remove"
+
+[connection signal="text_changed" from="HBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]

@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=3 uid="uid://6gfbmbqige21"]
+
+[sub_resource type="GDScript" id="GDScript_vrpal"]
+script/source = "extends Button
+
+
+func _on_pressed() -> void:
+	
+	# Define the PowerShell command you want to run
+	var command = \"powershell -Command \\\"winget install ffmpeg\\\"\"
+	
+	# Execute the command in PowerShell
+	var result = OS.execute(command, [], [],false, true)
+	
+	if result == OK:
+		print(\"Command executed successfully.\")
+	else:
+		print(\"Failed to execute command.\")
+"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(700, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Download ffmpeg"
+script = SubResource("GDScript_vrpal")
+
+[connection signal="pressed" from="MarginContainer/Button" to="MarginContainer/Button" method="_on_pressed"]

@@ -1,0 +1,192 @@
+[gd_scene load_steps=7 format=3 uid="uid://6gfbmbqige21"]
+
+[ext_resource type="Script" path="res://TrackGrid.gd" id="1_0on77"]
+
+[sub_resource type="GDScript" id="GDScript_dpjbk"]
+script/source = "extends Label
+@onready var button: Button = $\"../Button\"
+
+func _on_button_file_update() -> void:
+	self.text = button.file_name
+"
+
+[sub_resource type="GDScript" id="GDScript_17gn6"]
+script/source = "extends Button
+var fd: FileDialog = FileDialog.new()
+
+@export var file_name: String
+@export var file_path: String
+signal file_update
+
+func _ready() -> void:
+	fd.file_selected.connect(fd_sel)
+	fd.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	fd.access = FileDialog.ACCESS_FILESYSTEM
+	fd.use_native_dialog = true
+	fd.set_filters([\"*.mp4, *.avi, *.mkv, *.mov, *.flv, *.wmv, *.webm, *.mpeg, *.3gp, *.ogg, *.vob, *.mxf, *.avchd, *.f4v, *.asf, *.mts, *.ts\"])
+func _on_pressed() -> void:
+	self.add_child(fd)
+	fd.show()
+
+func fd_sel(path: String) -> void:
+	file_path = path
+	file_name = path.get_file()
+	Master.cfg.set_val(\"file_path\", file_path)
+	Master.cfg.set_val(\"file_name\", file_name)
+	file_update.emit()
+"
+
+[sub_resource type="GDScript" id="GDScript_08bfb"]
+script/source = "extends Button
+
+func _ready() -> void:
+	self.pressed.connect(Master._on_pressed)
+"
+
+[sub_resource type="GDScript" id="GDScript_6atll"]
+script/source = "extends Button
+@onready var track_grid: TrackGrid = $\"../TrackGrid\"
+
+
+func _on_pressed() -> void:
+	track_grid.add_track.emit()
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_vrpal"]
+script/source = "extends Button
+var th: Thread = Thread.new()
+
+func _ready() -> void:
+	set_process(false)
+
+func _on_pressed() -> void:
+	set_process(true)
+	print(\"start\")
+	th.start(download_ffmpeg,Thread.PRIORITY_HIGH)
+
+func _process(_delta: float) -> void:
+	if th.is_started():
+		if !th.is_alive():
+			print(str(th.wait_to_finish()))
+			set_process(false)
+
+func download_ffmpeg() -> Array:
+	var command = \"powershell.exe\"
+	var output: Array
+	# Execute the command in PowerShell
+	var result = OS.execute(command, [\"-Command\",\"winget install ffmpeg\"], output,true, true)
+	
+	if result == OK:
+		print(\"Command executed successfully.\")
+	else:
+		print(\"Failed to execute command.\")
+	return output
+"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer"]
+custom_minimum_size = Vector2(700, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+script = SubResource("GDScript_dpjbk")
+
+[node name="Button" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select file"
+script = SubResource("GDScript_17gn6")
+
+[node name="Export" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+text = "Export"
+script = SubResource("GDScript_08bfb")
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2/PanelContainer"]
+layout_mode = 2
+
+[node name="TrackGrid" type="GridContainer" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("1_0on77")
+
+[node name="Button" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Add audio track"
+script = SubResource("GDScript_6atll")
+
+[node name="Button" type="Button" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Download ffmpeg"
+script = SubResource("GDScript_vrpal")
+
+[connection signal="file_update" from="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Button" to="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Label" method="_on_button_file_update"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Button" to="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/Button" method="_on_pressed"]
+[connection signal="add_track" from="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2/PanelContainer/VBoxContainer/TrackGrid" to="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2/PanelContainer/VBoxContainer/TrackGrid" method="_on_add_track"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2/PanelContainer/VBoxContainer/Button" to="MarginContainer/PanelContainer/HBoxContainer/MarginContainer2/VBoxContainer2/PanelContainer/VBoxContainer/Button" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/Button" to="MarginContainer/Button" method="_on_pressed"]
