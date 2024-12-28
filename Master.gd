@@ -46,6 +46,8 @@ func _process(_delta: float) -> void:
 			print(str(th.wait_to_finish()))
 			
 
+var export_complition: Node
+
 func seperate_tracks() -> Array:
 	var output: Array
 	# Execute the command in PowerShell
@@ -53,7 +55,7 @@ func seperate_tracks() -> Array:
 	var result = OS.execute("powershell.exe", ["-Command",command], output,true, true)
 	
 	if result == OK:
-		print("Command executed successfully.")
+		export_complition.on_completion.call_deferred(true)
 	else:
-		print("Failed to execute command.")
+		export_complition.on_completion.call_deferred(false)
 	return output

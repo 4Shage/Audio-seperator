@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://6gfbmbqige21"]
+[gd_scene load_steps=8 format=3 uid="uid://6gfbmbqige21"]
 
 [ext_resource type="Script" path="res://TrackGrid.gd" id="1_0on77"]
 
@@ -13,6 +13,7 @@ func _on_button_file_update() -> void:
 [sub_resource type="GDScript" id="GDScript_17gn6"]
 script/source = "extends Button
 var fd: FileDialog = FileDialog.new()
+@onready var status: Label = $\"../Status\"
 
 @export var file_name: String
 @export var file_path: String
@@ -25,6 +26,7 @@ func _ready() -> void:
 	fd.use_native_dialog = true
 	fd.set_filters([\"*.mp4, *.avi, *.mkv, *.mov, *.flv, *.wmv, *.webm, *.mpeg, *.3gp, *.ogg, *.vob, *.mxf, *.avchd, *.f4v, *.asf, *.mts, *.ts\"])
 func _on_pressed() -> void:
+	status.text = \"\"
 	self.add_child(fd)
 	fd.show()
 
@@ -34,6 +36,20 @@ func fd_sel(path: String) -> void:
 	Master.cfg.set_val(\"file_path\", file_path)
 	Master.cfg.set_val(\"file_name\", file_name)
 	file_update.emit()
+"
+
+[sub_resource type="GDScript" id="GDScript_a236w"]
+script/source = "extends Label
+func _ready() -> void:
+	Master.export_complition = self
+func on_completion(status: bool) -> void:
+	if !Master.cfg.has_val(\"file_path\"): return
+	if status:
+		self.text = \"Export successfull.\"
+	else:
+		self.text = \"Export failed.\"
+	await get_tree().create_timer(2).timeout
+	OS.shell_show_in_file_manager(Master.cfg.get_val(\"file_path\").replace(Master.cfg.get_val(\"file_name\"),\"\"))
 "
 
 [sub_resource type="GDScript" id="GDScript_08bfb"]
@@ -143,9 +159,14 @@ layout_mode = 2
 text = "Select file"
 script = SubResource("GDScript_17gn6")
 
-[node name="Export" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Status" type="Label" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 10
+script = SubResource("GDScript_a236w")
+
+[node name="Export" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
 text = "Export"
 script = SubResource("GDScript_08bfb")
 
