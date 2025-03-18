@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://6gfbmbqige21"]
+[gd_scene load_steps=9 format=3 uid="uid://6gfbmbqige21"]
 
-[ext_resource type="Script" path="res://TrackGrid.gd" id="1_0on77"]
+[ext_resource type="Script" uid="uid://cabohsjlpapge" path="res://TrackGrid.gd" id="1_0on77"]
+[ext_resource type="Theme" uid="uid://c6sac3jbxsye" path="res://main.tres" id="1_86fqk"]
 
 [sub_resource type="GDScript" id="GDScript_dpjbk"]
 script/source = "extends Label
@@ -107,6 +108,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_86fqk")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -163,6 +165,10 @@ script = SubResource("GDScript_17gn6")
 layout_mode = 2
 size_flags_vertical = 10
 script = SubResource("GDScript_a236w")
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Export to folder"
 
 [node name="Export" type="Button" parent="MarginContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2

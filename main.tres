@@ -1,0 +1,69 @@
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://c6sac3jbxsye"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_137wr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dxpyd"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e71rc"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b5ntk"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5v53s"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvxco"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qwefk"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ox7q6"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ix4cf"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bopsa"]
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[resource]
+Button/styles/focus = SubResource("StyleBoxFlat_137wr")
+Button/styles/hover = SubResource("StyleBoxFlat_dxpyd")
+Button/styles/normal = SubResource("StyleBoxFlat_e71rc")
+Button/styles/pressed = SubResource("StyleBoxFlat_b5ntk")
+CheckBox/styles/focus = SubResource("StyleBoxFlat_5v53s")
+CheckBox/styles/hover = SubResource("StyleBoxFlat_dvxco")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxFlat_qwefk")
+CheckBox/styles/normal = SubResource("StyleBoxFlat_ox7q6")
+CheckBox/styles/pressed = SubResource("StyleBoxFlat_ix4cf")
+Label/styles/normal = SubResource("StyleBoxFlat_bopsa")
